@@ -161,19 +161,19 @@ final class AppMonitorService: ObservableObject {
         let settings = Defaults.shared.appSettings
         guard settings.useExternalSSDCondition else { return true }
 
-                let selectedAppBundleIDs = Set(settings.effectiveSsdConditionAppBundleIdentifiers)
-                guard !selectedAppBundleIDs.isEmpty else {
-                        return true
+        let selectedAppBundleIDs = Set(settings.effectiveSsdConditionAppBundleIdentifiers)
+        guard !selectedAppBundleIDs.isEmpty else {
+            return true
         }
 
-                // SSD condition is per-app. Non-selected protected apps use default locking.
-                guard selectedAppBundleIDs.contains(bundleIdentifier) else { return true }
+        // SSD condition is per-app. Non-selected protected apps use default locking.
+        guard selectedAppBundleIDs.contains(bundleIdentifier) else { return true }
 
-                // If selected apps have no SSD configured yet, keep default locking behavior.
-                guard let selectedVolumeUUID = settings.ssdConditionVolumeUUID,
-                            !selectedVolumeUUID.isEmpty else {
-                        return true
-                }
+        // If selected apps have no SSD configured yet, keep default locking behavior.
+        guard let selectedVolumeUUID = settings.ssdConditionVolumeUUID,
+              !selectedVolumeUUID.isEmpty else {
+            return true
+        }
 
         let isSelectedVolumeConnected = ExternalDriveService.shared.isVolumeConnected(uuid: selectedVolumeUUID)
         return !isSelectedVolumeConnected
