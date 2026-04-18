@@ -35,7 +35,11 @@ struct LockOverlayView: View {
                         onDismiss()
                     },
                     onCancel: {
-                        onGoBack()
+                        OverlayWindowService.shared.setTouchIDMode(false)
+                        withAnimation(MakLockAnimations.standard) {
+                            showPasswordInput = false
+                            authState = .waitingForUser
+                        }
                     }
                 )
                 .transition(.opacity)
